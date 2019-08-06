@@ -1,0 +1,77 @@
+JVM:   java虚拟机
+Jre:	java 运行环境
+JDK：	java开发工具包
+	JVM 组成：	
+		类 加载器：在JVM 启动时或者 类运行时 将需要的class 加载到 JVM中。
+		执行引擎：任务是 负责 执行class 文件中包含的字节码指令，相当于实际机器上的CPU
+		内存区：将内存 划分成若干区 以模拟实际机器上的存储，记录和调度功能模块，。
+		
+			细分:类加载子系统、方法区、java堆（所有java 对象实例 都会存在java中）、直接内存、垃圾回收系统、java栈、本地方法栈、PC寄存器、执行引擎。
+			
+			
+			
+	MySQL:UNIN
+	
+	//查询studeng表格teacher表中的name,age，根据年龄升序排列asc 或 降序排列 desc
+	select name,age from student
+	union
+	select name,age from teacher
+	order by age asc/desc;  
+	
+	
+	group by; 分组统计  根据条件查出 个数
+	SELECT name, count(*) from student GROUP BY name;
+	
+	inner join   查询两表中  条件相同的值：
+	select a.name,a.age,b.name from student a,teacher b where a.name=b.name
+	
+	left join：查询作表中的所有数据和 有表中应的数据；
+	select a.name,a.age,b.name from student a left join teacher b On a.id=b.id;
+	
+	right jion: 查询右表中所有数据 和左 表中对应的数据
+	
+	select a.name,a.age,b.address from teacher a RIGHT JOIN student b on a.name=b.name;
+	
+	
+	给Mysql 表添加索引：ALTER table t1 add PRIMARY key(id);
+	
+	数据库优化：
+	1、添加索引
+	2、分表
+	3、读写分离集群
+	4、使用缓存（redis)
+	
+	1.Redis解释:Redis 是一个基于key-value形式进行存储的内存型数据库.是一块可持久化，直接对数据存储到磁盘的数据库
+	
+	单例模式：
+	//饿汉
+	public class Singleton{
+		private static Singeton instance = new Singeton();
+		
+		private Singeton(){}
+		
+		public static getSingleton(){
+			return instance;
+		}
+	}
+	//懒汉
+	public class singleton{
+		private Singeleton s1;
+		private singleton(){}
+		
+		public static singleton(){
+			if(s==null){
+				s=new Singeleton();
+			}
+			return s;
+		}
+	
+	}
+	
+	
+	git：常用命令： git fetch:相当于是从远程获取最新版本到本地，不会自动merge
+					git merge:将内容合并到当前分支
+					git pull:相当于从远程获取最新 merge 到本地
+					git log -p <file> ：查看每次详细修改内容的diff
+					
+			git和SVN区别：git是分布式版本控制系统，SVN是集中式版本控制系统
