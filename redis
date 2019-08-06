@@ -1,0 +1,84 @@
+1.Redis:是一个基于  key-value 形式进行存储的内存数据。
+
+	1.1数据存储方式为   key-value
+	1.2数据存在在内存中：
+		1.2.1有点：存储效率高   理论值：每秒10K 数据读取
+	
+	1.3 定位：数据库软件
+		1.3.1 作用：存储数据库
+		
+2.Redis 是一个NoSql 数据库
+	2.1 字面理解：不使用 SQL 命令操作数据库软件
+	2.2 NoSql : 英文全名称 Not Only SQL ，表示在应用程序开发时，不是必须使用关系型 数据库，可以使用 NoSql 替代关系型数据库的 部分功能。
+
+3.Redis 持久化策略：
+	3.1 rdb
+		3.1.1 默认的持久化策略
+		3.1.2 每隔一段时间后吧内存数据持久化到 dump.rdb 文件中。
+		
+		3.1.3 缺点：
+			1.数据过于集中
+			2.可能导致最后的数据没有持久化到 dump.rdb中
+			
+				解决办法：使用命令SAVE 或 BGSAVE手动持久化
+				
+	3.2 aof
+		3.2.1 监听Redis 的日志文件，监听如果发现执行了修改，删除，新增命令，立即根据这条命令吧数据持久化。
+		
+		3.2.2 缺单：
+			1.效率降低
+			
+			
+二、Redis 常用命令：
+
+	1.可查看Redis 命令手册网址；
+	2.Redis 常用数据类型
+		2.1 String
+		2.2 Hash
+		2.3 List
+		2.4 Set
+		2.5 SortedSet 有序集合
+		
+三、Redis 常用概念
+	1.Redis 默认有16384 solts（槽），每个槽可以存取多个hash 值。
+	2.Redis 默认不需要密码；
+		
+	3.设置密码后需要通过
+		3.1 -h 主机 ip
+		3.2 -p 端口
+		3.3 -a 密码
+			./redis-cli -h1920168.0.104 -p 6379 -a hua154818
+			
+四、Jedis:
+	1.Jedis 是Redis 客户端工具jar
+	
+五、Jedis 集群：
+	1.集群的概念：
+		1.1 多个业务单元协同工作组成的整体 称为：集群
+			1.1.1  每个业务单元都是相同的
+	
+	2.当业务集群中 业务单元超过或等于 1/2个down掉时，整个集群不可用。
+		2.1 建议使用 奇数个，整体 down 掉 几率小。
+	3. 一主一备模式：
+		3.1 给每一个业务单元创建一个备份单元，原来的业务单元(master)  后产生的叫做(slave).
+		
+	4.集群和伪集群：
+		4.1：集群：每个业务单元都安装到单独的服务器上
+		4.2：伪集群：所有业务单元都安装到同一个服务器上，通过端口区分不同的业务单元。
+		
+六、使用Jedis 访问 Redis集群：
+			 Set<HostAndPort> set = new HashSet<HostAndPort>();
+			set.add(new HostAndPort("192.168.0.104",7001));
+			set.add(new HostAndPort("192.168.0.104",7002));
+			set.add(new HostAndPort("192.168.0.104",7003));
+			set.add(new HostAndPort("192.168.0.104",7004));
+			set.add(new HostAndPort("192.168.0.104",7005));
+			set.add(new HostAndPort("192.168.0.104",7006));
+			JedisCluster cluster = new JedisCluster(set);
+			String result = cluster.get("a");
+			System.out.println(result);
+	
+		
+		
+	
+		

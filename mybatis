@@ -1,0 +1,112 @@
+ResultType
+resultType可以直接返回给出的返回值类型，比如String、int、Map，等等，其中返回List也是将返回类型定义为Map，然后mybatis会自动将这些map放在一个List中，resultType还可以是一个对象，举例如下：
+					返回常见类型：（类似于int或者Integer）
+		　　<select id="getLogCount" resultType="int">
+		　　　　select COUNT(*) from AttLog where attTime = #{attTime} and userId = #{userId};
+			</select>
+ 
+ 
+			返回Map
+			<select id="getDeviceInfoByDeviceId" resultType="Map">
+			　　select userCount as usercount,
+			　　fingerCount as fingercount,
+			　　faceCount as facecount,
+			　　attRecordCount as recordcount,
+			　　lastOnline,
+			　　state as status
+			　　from DeviceInfo where deviceId = #{deviceId} and tb_isDelete = 0;
+			</select>
+			
+	resultType对应的是java对象中的属性，大小写不敏感，
+	resultType如果放的是java.lang.Map,key是查询语句的列名，value是查询的值，大小写敏感
+	resultMap:指的是定义好了的id的，是定义好的resyltType的引用
+	注意：用resultType的时候，要保证结果集的列名与java对象的属性相同，而resultMap则不用，而且resultMap可以用typeHander转换
+	parameterType:参数类型，只能传一个参数，如果有多个参数要封装，如封装成一个类，要写包名加类名，基本数据类型则可以省略
+	一对1、一对多时，若有表的字段相同必须写别名，不然查询结果无法正常映射，出现某属性为空或者返回的结果与想象中的不同，而这往往是没有报错的。
+ 
+ResultMap
+	基本使用
+	适合使用返回值是自定义实体类的情况
+
+	映射实体类的数据类型
+
+	id:resultMap的唯一标识
+
+	column: 库表的字段名
+
+	property： 实体类里的属性名
+	id和result
+<id property="id" column="post_id"/>		//主键使用 id 标签
+
+<result property="subject" column="post_subject"/>	//其他列使用 result 标签
+
+这是最基本的结果集映射。id 和result 将列映射到属性或简单的数据类型字段(String, int, double, Date等)。
+
+这两者唯一不同的是，在比较对象实例时id 作为结果集的标识属性。这有助于提高总体性能，特别是应用缓存和嵌套结果映射的时候。
+ 
+
+
+
+1、Mybatis 实现多表查询：
+	1.Auoto Mappring 特性，来实现两表联合查询时通过别名完成 映射。
+	2.使用 Mybatis 的 <resultMap> 标签进行实现。
+	3.业务装配，对两个表编写单表查询，在业务(service) 吧查询的两个结果 进行关联。
+	
+2、多表查询时，类中包含另一个类的对象的分类
+		2.1 单个对象
+		2.2 多个对象
+		
+	<resultMap>标签：
+		1.<resultMap> 标签写在 mapper.xml中，由程序员控制SQL查询结果与实体类的映射关系。
+			1.1 默认 AutoMapping 特性。
+			
+		2.使用<resultMap> 标签时，<select> 标签不写 resultMap 属性，而是使用 resultMap 属性引用 <resultMap> 标签。
+	
+		*3.使用resultMap实现关联 单个对象（N+1方式)
+			3.1 N+1 查询方式：先查询出某个表的全部信息，根据这个表的信息 查询另一个表 的信息。
+			3.2. 与业务装配的区别：在service 里面写的代码，由mybatis来完成装配。
+			
+		4. 实现步骤：
+			4.1：在POJO的实体类中 包含 另一个实体类。
+			4.2：在 包含的实体类的mapper.xml 中提供一个查询：
+				<select id="selById" resultType="teacher" parameterType="int">
+					select * from teacher where id =#{0}
+				</select>
+			
+			4.3 在包含teacher实体类的实体类mapper.xml 中：
+				4.3.1 <association> 装配一个对象时使用
+				4.3.2 property: 对象在类中的属性名
+				4.3.3 select: 通过哪个查询出这个对象的信息
+				4.3.4 吧当前表的哪个列的值作为参数传递给另一个 查询
+				4.3.5 大前提 使用 N+1 方式，如果列名和属性名相同可以不配置，使用AutoMapping 特性，但是mybatis 只会给列装配一次
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
